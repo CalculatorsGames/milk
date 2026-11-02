@@ -2,7 +2,7 @@
 <html lang="en-us">
 
 <head>
-  <base href="https://cdn.jsdelivr.net/gh/genizy/web-port@main/milkman-karlson/">
+    <base href="https://cdn.jsdelivr.net/gh/genizy/web-port@main/milkman-karlson/">
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -89,26 +89,27 @@
             container.style.width = window.innerWidth + "px";
             container.style.height = window.innerHeight + "px";
         }
+        
         Promise.all([
             mergeFiles(getParts("Build/MILKMAN.data.unityweb", 1, 5))
         ]).then(([dataUrl]) => {
             window.dataUrll = dataUrl;
             var json = {
-"companyName": "Dani",
-"productName": "MilkmanKarlson",
-"productVersion": "0.2",
-"dataUrl": "MILKMAN.data.unityweb",
-"wasmCodeUrl": "MILKMAN.wasm.code.unityweb",
-"wasmFrameworkUrl": "MILKMAN.wasm.framework.unityweb",
-"graphicsAPI": ["WebGL 2.0","WebGL 1.0"],
-"webglContextAttributes": {"preserveDrawingBuffer": false},
-"backgroundUrl": "MILKMAN.jpg",
-"splashScreenStyle": "Dark",
-"backgroundColor": "#FFFFFF",
-"developmentBuild": false,
-"multithreading": false,
-"unityVersion": "2019.2.13f1"
-};
+                "companyName": "Dani",
+                "productName": "MilkmanKarlson",
+                "productVersion": "0.2",
+                "dataUrl": dataUrl, // Fixed to point to the merged blob URL correctly
+                "wasmCodeUrl": "MILKMAN.wasm.code.unityweb",
+                "wasmFrameworkUrl": "MILKMAN.wasm.framework.unityweb",
+                "graphicsAPI": ["WebGL 2.0", "WebGL 1.0"],
+                "webglContextAttributes": {"preserveDrawingBuffer": false},
+                "backgroundUrl": "MILKMAN.jpg",
+                "splashScreenStyle": "Dark",
+                "backgroundColor": "#FFFFFF",
+                "developmentBuild": false,
+                "multithreading": false,
+                "unityVersion": "2019.2.13f1"
+            };
             let blob = new Blob([JSON.stringify(json)], {
                 type: 'application/json'
             });
@@ -120,8 +121,10 @@
                 Module: {
                     onRuntimeInitialized: function () {
                         resizeUnityContainer();
-                        document.querySelector("#loading-text").remove();
-document.querySelector("#fast-graphics-warning").remove();
+                        var loadingText = document.querySelector("#loading-text");
+                        if (loadingText) loadingText.remove();
+                        var warningText = document.querySelector("#fast-graphics-warning");
+                        if (warningText) warningText.remove();
                     }
                 }
             });
